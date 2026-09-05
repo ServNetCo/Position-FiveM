@@ -1,12 +1,6 @@
--- ============================================================
--- Street HUD - Affiche la rue (et le quartier) au dessus de la minimap
--- Standalone, ne dépend d'aucun framework (ESX/QBCore)
--- ============================================================
-
 local currentStreetText = ""
 local currentZoneText = ""
 
--- Récupère et formate le nom de la rue + éventuellement la rue transversale
 local function GetStreetLabel(coords)
     local streetHash, crossingHash = GetStreetNameAtCoord(coords.x, coords.y, coords.z)
     local streetName = GetStreetNameFromHashKey(streetHash)
@@ -21,13 +15,11 @@ local function GetStreetLabel(coords)
     return streetName
 end
 
--- Récupère le nom affichable du quartier (zone) courant
 local function GetZoneLabel(coords)
     local zoneCode = GetNameOfZone(coords.x, coords.y, coords.z)
     return GetLabelText(zoneCode)
 end
 
--- Dessine une ligne de texte à l'écran avec les paramètres du config
 local function DrawScaledText(text, x, y, scale, color, outline)
     SetTextFont(Config.Font)
     SetTextScale(scale, scale)
@@ -41,7 +33,6 @@ local function DrawScaledText(text, x, y, scale, color, outline)
     DrawText(x, y)
 end
 
--- Thread de mise à jour des infos (rue / zone), pas besoin de le faire à chaque frame
 Citizen.CreateThread(function()
     while true do
         local ped = PlayerPedId()
@@ -57,7 +48,6 @@ Citizen.CreateThread(function()
     end
 end)
 
--- Thread d'affichage, doit tourner chaque frame (DrawText ne dure qu'une frame)
 Citizen.CreateThread(function()
     while true do
         local shouldDraw = true
